@@ -33,16 +33,23 @@ public class SecurityConfig {
 
                 .authorizeExchange(exchange -> exchange
 
-                        // Public APIs
+                        // Public APIs - No authentication required
                         .pathMatchers(
                                 "/auth/register",
                                 "/auth/login"
                         ).permitAll()
 
-                        // Swagger
+                        // Health check endpoints
+                        .pathMatchers(
+                                "/actuator/**",
+                                "/actuator/health"
+                        ).permitAll()
+
+                        // Swagger/OpenAPI Documentation - Public access
                         .pathMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
+                                "/v3/api-docs",
                                 "/v3/api-docs/**",
                                 "/webjars/**"
                         ).permitAll()
@@ -77,7 +84,7 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Loan Service
+                        // Loan Service - View loans
                         .pathMatchers("/loans/**")
                         .hasAnyRole(
                                 "CUSTOMER",
@@ -85,7 +92,7 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Loan Approval/Rejection
+                        // Loan Approval/Rejection - Bank Employee and Admin only
                         .pathMatchers(
                                 "/loans/*/approve",
                                 "/loans/*/reject"
@@ -103,10 +110,11 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Admin APIs
+                        // Admin APIs - Admin only
                         .pathMatchers("/admin/**")
                         .hasRole("ADMIN")
 
+                        // All other requests require authentication
                         .anyExchange().authenticated()
                 )
                 .build();
