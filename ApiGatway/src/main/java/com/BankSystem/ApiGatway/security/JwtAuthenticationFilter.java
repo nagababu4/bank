@@ -16,6 +16,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements WebFilter {
@@ -81,6 +82,8 @@ public class JwtAuthenticationFilter implements WebFilter {
 
     private Collection<? extends GrantedAuthority> extractAuthorities(Claims claims) {
         String role = (String) claims.get("role");
+        // Don't add ROLE_ prefix here - SecurityConfig already expects it in hasAnyRole()
+        // hasAnyRole() automatically adds ROLE_ prefix, so JWT should contain plain role name
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 }
