@@ -35,9 +35,11 @@ public class AuthServiceImpl
 
         repository.save(user);
 
+        // FIX: Pass role to generateToken
         String token =
                 jwtService.generateToken(
-                        user.getUsername());
+                        user.getUsername(),
+                        user.getRole().name());
 
         return new AuthResponse(
                 token,
@@ -59,9 +61,11 @@ public class AuthServiceImpl
                                 request.getUsername())
                         .orElseThrow();
 
+        // FIX: Pass role to generateToken
         String token =
                 jwtService.generateToken(
-                        user.getUsername());
+                        user.getUsername(),
+                        user.getRole().name());
 
         return new AuthResponse(
                 token,
