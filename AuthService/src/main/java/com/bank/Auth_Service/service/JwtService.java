@@ -20,13 +20,20 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String username) {
+    // Updated: Accepts both username and role
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .subject(username)
+                .claim("role", role)  // CRITICAL: Add role claim to JWT
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    // Legacy method for backwards compatibility
+    public String generateToken(String username) {
+        return generateToken(username, "USER");
     }
 
     public String extractUsername(String token) {
