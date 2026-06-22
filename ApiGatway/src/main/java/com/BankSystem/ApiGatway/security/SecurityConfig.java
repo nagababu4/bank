@@ -54,6 +54,10 @@ public class SecurityConfig {
                                 "/webjars/**"
                         ).permitAll()
 
+                        // Auth Service - ADMIN can access everything in auth service
+                        .pathMatchers("/auth/**")
+                        .hasRole("ADMIN")
+
                         // Customer Service
                         .pathMatchers("/customers/**")
                         .hasAnyRole(
@@ -70,21 +74,21 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Transaction Service
+                        // Transaction Service - CUSTOMER and ADMIN only
                         .pathMatchers("/transactions/**")
                         .hasAnyRole(
                                 "CUSTOMER",
                                 "ADMIN"
                         )
 
-                        // Beneficiary Service
+                        // Beneficiary Service - CUSTOMER and ADMIN only
                         .pathMatchers("/beneficiaries/**")
                         .hasAnyRole(
                                 "CUSTOMER",
                                 "ADMIN"
                         )
 
-                        // Loan Service - View loans
+                        // Loan Service - View loans (CUSTOMER, BANK_EMPLOYEE, ADMIN)
                         .pathMatchers("/loans/**")
                         .hasAnyRole(
                                 "CUSTOMER",
@@ -92,7 +96,7 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Loan Approval/Rejection - Bank Employee and Admin only
+                        // Loan Approval/Rejection - BANK_EMPLOYEE and ADMIN only
                         .pathMatchers(
                                 "/loans/*/approve",
                                 "/loans/*/reject"
@@ -102,7 +106,7 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Notification Service
+                        // Notification Service - CUSTOMER, BANK_EMPLOYEE, and ADMIN
                         .pathMatchers("/notifications/**")
                         .hasAnyRole(
                                 "CUSTOMER",
@@ -110,7 +114,7 @@ public class SecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Admin APIs - Admin only
+                        // Admin APIs - ADMIN only
                         .pathMatchers("/admin/**")
                         .hasRole("ADMIN")
 
